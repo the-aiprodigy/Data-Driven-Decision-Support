@@ -12,7 +12,7 @@ This repository is dedicated to the design, development, and deployment of a dat
 
 ## Featured Projects
 
-## Taxi Upfront Pricing Precision
+### Taxi Upfront Pricing Precision
 Improving taxi app accuracy with added pickup/drop-off locations to ensure better ride cost estimates in upgraded versions.
 
 ### Sales Forecasting 
