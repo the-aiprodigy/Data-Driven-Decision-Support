@@ -1,0 +1,6 @@
+These folders represent the four parts of any data science project.
+
+Data – is the folder for all the data collected or been given to analyze.
+Figures – is the folder for plots, data pictures, and other images created to show data to other people.  
+code – is the folder for code files used for collecting, cleaning up, or analyzing data.
+Products – is the folder for any reports, presentations created for sharing with other people
