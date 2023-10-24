@@ -2,7 +2,8 @@
 
 ## Introduction
 
-This repository is dedicated to the design, development, and deployment of a data-driven decision support system. In today's rapidly changing environment, the ability to make timely, informed decisions is more important than ever. With this system, we aim to harness the power of data analytics to provide actionable insights and recommendations.
+This repository is dedicated to the design, development, and deployment of a data-driven decision support system. In today's rapidly changing environment, the ability to make timely, informed decisions is more important than ever. With this system, I aim to harness the power of data analytics to provide actionable insights and recommendations.
+Projects in this category emphasize using data to guide and support decision-making processes. This will often involve creating actionable recommendations based on data insights.
 
 ## Objective
 
@@ -31,9 +32,9 @@ Analysis of customer behavior and purchase histories to segment the customer bas
 4. **Deployment & Visualization**: Integrating models into decision-making tools, dashboards, and visualization platforms for easy consumption.
 
 ## Tools & Technologies Used
-
-- Python (Pandas, Scikit-learn, StatsModels)
-- SQL (for data extraction and management)
+- Languages & Libraries: Python, Pandas, Scipy (for statistical analysis), Scikit-learn, StatsModels
+- Database Management: SQL (PostgreSQL, MySQL, Oracle SQL), NoSQL (MongoDB), PL/SQL
+- Visualization & Reporting: Tableau, Power BI, Oracle Analytics Cloud, Looker
 
 
 ## Setup & Installation
