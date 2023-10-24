@@ -24,9 +24,9 @@ Utilizing historical sales data and market trends to provide accurate sales pred
 
 Analysis of customer behavior and purchase histories to segment the customer base, thereby enabling more personalized marketing campaigns.
 
-- Optimization of supply chain logistics using historical shipment data.
-- Analysis of customer feedback to prioritize feature development in a tech product.
-- Determining the best locations for new retail outlets based on demographics and competitor locations.
+### Optimization of supply chain logistics using historical shipment data.
+### Analysis of customer feedback to prioritize feature development in a tech product.
+### Determining the best locations for new retail outlets based on demographics and competitor locations.
 
 ## Tools & Technologies Used
 - Languages & Libraries: Python, Pandas, Scipy (for statistical analysis), Scikit-learn, StatsModels
