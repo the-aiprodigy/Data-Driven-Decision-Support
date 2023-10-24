@@ -24,12 +24,9 @@ Utilizing historical sales data and market trends to provide accurate sales pred
 
 Analysis of customer behavior and purchase histories to segment the customer base, thereby enabling more personalized marketing campaigns.
 
-## Methodology
-
-1. **Data Collection & Cleaning**: Sourcing data from multiple systems, cleaning it to ensure its quality and integrity.
-2. **Exploratory Data Analysis (EDA)**: Comprehensive analysis to understand data distribution, relationships, and anomalies.
-3. **Model Development**: Building predictive models to forecast, classify, or identify patterns.
-4. **Deployment & Visualization**: Integrating models into decision-making tools, dashboards, and visualization platforms for easy consumption.
+- Optimization of supply chain logistics using historical shipment data.
+- Analysis of customer feedback to prioritize feature development in a tech product.
+- Determining the best locations for new retail outlets based on demographics and competitor locations.
 
 ## Tools & Technologies Used
 - Languages & Libraries: Python, Pandas, Scipy (for statistical analysis), Scikit-learn, StatsModels
