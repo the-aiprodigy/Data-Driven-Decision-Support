@@ -1,25 +1,22 @@
 <!doctype html><html><head><meta charset='utf-8'><title>Insights & Action Plan</title><link rel='stylesheet' href='style.css'></head><body>
 <nav><a href='index.html'>Executive Overview</a><a class='active' href='insights.html'>Insights & Action Plan</a></nav>
 <div class='wrap'>
-  <h1>Root Cause & Recommended Actions</h1><div class='sub'>Operational insights for pricing, risk, and product leadership</div>
+  <section class='hero'><h1>Root Cause & Recommended Actions</h1><p>Deep-dive diagnostics with segment filter chips and tactical rollout guidance.</p><div id='segChips' class='chips'></div></section>
   <div class='grid'>
-    <div class='card w6'><h3>Destination Change Impact</h3><canvas id='dest'></canvas></div>
-    <div class='card w6'><h3>Fraud/Risk Segment Impact</h3><canvas id='fraud'></canvas></div>
+    <div class='card w6'><h3 id='leftTitle'>Destination Change Impact</h3><canvas id='leftChart'></canvas></div>
+    <div class='card w6'><h3 id='rightTitle'>Fraud/Risk Segment Impact</h3><canvas id='rightChart'></canvas></div>
     <div class='card w12'><h3>Bias Gap: Switched vs Non-switched</h3><canvas id='bias'></canvas></div>
-    <div class='card w12'><h3>Action Plan (Company-ready)</h3>
-      <ol>
-        <li><b>GPS fallback policy</b>: if confidence is low, trigger re-pin or buffered quote.</li>
-        <li><b>Dynamic uplift model</b>: estimate underprediction risk from context and calibrate quote.</li>
-        <li><b>A/B/n governance</b>: Control vs Fallback vs Fallback+Uplift with guardrails on conversion, cancellation and complaints.</li>
-      </ol>
-    </div>
+    <div class='card w12'><h3>Action Plan (Company-ready)</h3><ol><li><b>GPS fallback policy</b> for low confidence trips.</li><li><b>Dynamic uplift model</b> for underprediction risk.</li><li><b>A/B/n governance</b> with conversion/cancellation/complaint guardrails.</li></ol></div>
   </div>
 </div>
 <script src='app.js'></script>
 <script>
 load().then(d=>{
- drawBars('dest',d.dest.map(x=>x.segment),d.dest.map(x=>x.switch_rate),['#fb7185','#f59e0b']);
- drawBars('fraud',d.fraud.map(x=>x.segment),d.fraud.map(x=>x.switch_rate),['#34d399','#60a5fa','#f97316','#f472b6']);
+ function render(mode){
+   if(mode==='GPS vs EU'){document.getElementById('leftTitle').textContent='GPS Segment Impact';document.getElementById('rightTitle').textContent='EU Segment Impact';drawBars('leftChart',d.gps.map(x=>x.segment),d.gps.map(x=>x.switch_rate),['#fb7185','#60a5fa']);drawBars('rightChart',d.eu.map(x=>x.segment),d.eu.map(x=>x.switch_rate),['#34d399','#a78bfa']);}
+   else if(mode==='Destination vs Fraud'){document.getElementById('leftTitle').textContent='Destination Change Impact';document.getElementById('rightTitle').textContent='Fraud Segment Impact';drawBars('leftChart',d.dest.map(x=>x.segment),d.dest.map(x=>x.switch_rate),['#fb7185','#f59e0b']);drawBars('rightChart',d.fraud.map(x=>x.segment),d.fraud.map(x=>x.switch_rate),['#34d399','#60a5fa','#f97316','#f472b6']);}
+ }
+ chipGroup('segChips',['Destination vs Fraud','GPS vs EU'],render); render('Destination vs Fraud');
  const labels=['Switched Distance Bias','Non-switched Distance Bias','Switched Duration Bias','Non-switched Duration Bias'];
  const vals=[d.bias.switched.distance,Math.max(d.bias.not_switched.distance,0),d.bias.switched.duration,Math.max(d.bias.not_switched.duration,0)];
  drawBars('bias',labels,vals,['#f43f5e','#22d3ee','#8b5cf6','#10b981']);
