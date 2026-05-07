@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset='utf-8'><title>Bolt-style Pricing Dashboard</title><link rel='stylesheet' href='style.css'></head><body>
-<nav><a class='active' href='index.html'>Executive Overview</a><a href='insights.html'>Insights & Action Plan</a></nav>
+<nav><a class='active' href='index.html'>Executive Overview</a><a href='insights.html'>Insights & Action Plan</a><a href='food-launch.html'>Food Delivery Launch</a></nav>
 <div class='wrap'>
-  <section class='hero'><h1>Taxi Upfront Pricing Precision</h1><p>Portfolio-grade, executive analytics dashboard styled for modern mobility operations.</p><div id='cityChips' class='chips'></div></section>
+  <section class='hero'><h1>Taxi Upfront Pricing Precision</h1><p>Portfolio-grade executive dashboard with synchronized market filters.</p><div id='cityChips' class='chips'></div></section>
   <div class='grid' id='kpis'></div>
   <div class='grid'>
     <div class='card w8'><h3>Error Distribution Trend</h3><canvas id='hist'></canvas></div>
@@ -12,20 +12,17 @@
 </div>
 <script src='app.js'></script>
 <script>
-load().then(d=>{
+load().then(D=>{
  function render(mode='All Markets'){
-  const eu=d.eu.find(x=>x.segment==='1')||{rides:0,switch_rate:0};
-  const non=d.eu.find(x=>x.segment==='0')||{rides:0,switch_rate:0};
-  const market= mode==='EU Market'?{rides:eu.rides,switch_rate:eu.switch_rate}:mode==='Non-EU Market'?{rides:non.rides,switch_rate:non.switch_rate}:{rides:d.meta.clean_rides,switch_rate:d.meta.switch_rate};
-  const cards=[['Completed rides',market.rides.toLocaleString(),'#60a5fa'],['Est. switched rides',Math.round(market.rides*market.switch_rate).toLocaleString(),'#f472b6'],['Switch rate',(market.switch_rate*100).toFixed(1)+'%','#f59e0b'],['Precision success',((1-market.switch_rate)*100).toFixed(1)+'%','#5eead4']];
+  const d=D[MARKET_KEY[mode]];
+  const cards=[['Completed rides',d.meta.clean_rides.toLocaleString(),'#60a5fa'],['Switched rides',d.meta.switched_rides.toLocaleString(),'#f472b6'],['Switch rate',(d.meta.switch_rate*100).toFixed(1)+'%','#f59e0b'],['Precision success',((1-d.meta.switch_rate)*100).toFixed(1)+'%','#5eead4']];
   document.getElementById('kpis').innerHTML=cards.map(c=>`<div class='card kpi'><h4>${c[0]}</h4><div class='v' style='color:${c[2]}'>${c[1]}</div></div>`).join('');
+  drawLine('hist',d.error_hist.map(x=>x.count/d.meta.clean_rides),d.error_hist.map(x=>x.bin_start.toFixed(1)));
+  drawBars('gps',d.gps.map(x=>x.segment),d.gps.map(x=>x.switch_rate),['#f97316','#60a5fa','#34d399']);
+  drawBars('eu',d.eu.map(x=>x.segment),d.eu.map(x=>x.switch_rate),['#a78bfa','#22d3ee']);
+  const top=[...d.gps,...d.eu,...d.dest].sort((a,b)=>b.switch_rate-a.switch_rate).slice(0,5);
+  document.getElementById('riskList').innerHTML=top.map(x=>`<p><span class='pill'>${x.segment}</span> ${(x.switch_rate*100).toFixed(1)}% switch rate</p>`).join('');
  }
- chipGroup('cityChips',['All Markets','EU Market','Non-EU Market'],render);
- render();
- drawLine('hist',d.error_hist.map(x=>x.count));
- drawBars('gps',d.gps.map(x=>x.segment),d.gps.map(x=>x.switch_rate),['#f97316','#60a5fa','#34d399']);
- drawBars('eu',d.eu.map(x=>x.segment),d.eu.map(x=>x.switch_rate),['#a78bfa','#22d3ee']);
- const top=[...d.gps,...d.eu,...d.dest].sort((a,b)=>b.switch_rate-a.switch_rate).slice(0,5);
- document.getElementById('riskList').innerHTML=top.map(x=>`<p><span class='pill'>${x.segment}</span> ${(x.switch_rate*100).toFixed(1)}% switch rate</p>`).join('');
+ chipGroup('cityChips',['All Markets','EU Market','Non-EU Market'],render); render();
 });
 </script></body></html>
