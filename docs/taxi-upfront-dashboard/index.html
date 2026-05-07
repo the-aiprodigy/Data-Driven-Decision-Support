@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset='utf-8'><title>Bolt-style Pricing Dashboard</title><link rel='stylesheet' href='style.css'></head><body>
+<nav><a class='active' href='index.html'>Executive Overview</a><a href='insights.html'>Insights & Action Plan</a></nav>
+<div class='wrap'>
+  <h1>Taxi Upfront Pricing Precision</h1><div class='sub'>Colorful executive dashboard inspired by modern mobility analytics</div>
+  <div class='grid' id='kpis'></div>
+  <div class='grid'>
+    <div class='card w8'><h3>Error Distribution Trend</h3><canvas id='hist'></canvas></div>
+    <div class='card w4'><h3>Top Segment Risks</h3><div id='riskList'></div></div>
+    <div class='card w6'><h3>Switch Rate by GPS Confidence</h3><canvas id='gps'></canvas></div>
+    <div class='card w6'><h3>Switch Rate by Region (EU indicator)</h3><canvas id='eu'></canvas></div>
+  </div>
+</div>
+<script src='app.js'></script>
+<script>
+load().then(d=>{
+ const cards=[['Completed rides',d.meta.clean_rides.toLocaleString(),'#60a5fa'],['Switched rides',d.meta.switched_rides.toLocaleString(),'#f472b6'],['Switch rate',(d.meta.switch_rate*100).toFixed(1)+'%','#f59e0b'],['Precision success',((1-d.meta.switch_rate)*100).toFixed(1)+'%','#5eead4']];
+ document.getElementById('kpis').innerHTML=cards.map(c=>`<div class='card kpi'><h4>${c[0]}</h4><div class='v' style='color:${c[2]}'>${c[1]}</div></div>`).join('');
+ drawLine('hist',d.error_hist.map(x=>x.count));
+ drawBars('gps',d.gps.map(x=>x.segment),d.gps.map(x=>x.switch_rate),['#f97316','#60a5fa','#34d399']);
+ drawBars('eu',d.eu.map(x=>x.segment),d.eu.map(x=>x.switch_rate),['#a78bfa','#22d3ee']);
+ const top=[...d.gps,...d.eu,...d.dest].sort((a,b)=>b.switch_rate-a.switch_rate).slice(0,5);
+ document.getElementById('riskList').innerHTML=top.map(x=>`<p><span class='pill'>${x.segment}</span> ${(x.switch_rate*100).toFixed(1)}% switch rate</p>`).join('');
+});
+</script></body></html>

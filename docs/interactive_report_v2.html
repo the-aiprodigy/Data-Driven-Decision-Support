@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Taxi Upfront Pricing Precision — Interactive Report V2</title>
+<style>
+ body{font-family:Inter,Arial,sans-serif;margin:0;background:#f4f7fb;color:#1f2937}
+ header{background:#0f172a;color:#fff;padding:28px}
+ .container{max-width:1100px;margin:0 auto;padding:20px}
+ .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+ .card{background:white;border-radius:10px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+ .card h3{margin:0;font-size:13px;color:#64748b}.card .v{font-size:28px;font-weight:700;margin-top:6px}
+ .panel{background:#fff;margin-top:16px;padding:16px;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+ canvas{max-width:100%;height:320px}
+ select{padding:8px;border-radius:8px;border:1px solid #cbd5e1}
+ .small{color:#6b7280;font-size:13px}
+</style>
+</head>
+<body>
+<header><h1>Taxi Upfront Pricing Precision — Interactive Report (V2)</h1><p>Business-ready diagnostics and opportunity sizing</p></header>
+<div class="container">
+  <div class="cards" id="kpis"></div>
+  <div class="panel">
+    <h3>Segment Switch Rates</h3>
+    <p class="small">Choose segment and inspect switch-rate concentration.</p>
+    <select id="segment"></select>
+    <canvas id="chart"></canvas>
+  </div>
+  <div class="panel">
+    <h3>Top Opportunities</h3>
+    <ol>
+      <li><b>GPS fallback policy</b> for low-confidence trips to reduce high switch concentration.</li>
+      <li><b>Dynamic underprediction correction</b> using bias-risk uplift before quote finalization.</li>
+    </ol>
+  </div>
+  <div class="panel">
+    <h3>Business Research Part 2 — Experiment Plan</h3>
+    <ul>
+      <li>3-arm A/B/n: control vs GPS fallback vs GPS fallback + uplift.</li>
+      <li>Primary KPI: switch rate. Guardrails: conversion, cancellations, complaints, margin.</li>
+      <li>Rollout: shadow → 10% pilot → 50% → full scale with rollback criteria.</li>
+    </ul>
+  </div>
+</div>
+<script>
+const summary={clean_rides:3409, switched_rides:1563, switch_rate:0.458492, distance_bias_switched:0.392787, duration_bias_switched:0.593769};
+const segments={
+ "GPS confidence":[["<0.4",372,0.6989],[">=0.8",3037,0.4290]],
+ "EU indicator":[["0",882,0.5646],["1",2527,0.4214]],
+ "Destination changes":[["2+",121,0.6033],["1",3288,0.4532]],
+ "Fraud bucket":[["very_high",7,0.8571],["high",35,0.6000],["low",3367,0.4565]]
+};
+
+const kpi=[
+ ["Clean rides", summary.clean_rides.toLocaleString()],
+ ["Switched rides", summary.switched_rides.toLocaleString()],
+ ["Switch rate", (summary.switch_rate*100).toFixed(1)+"%"],
+ ["Switched duration bias", (summary.duration_bias_switched*100).toFixed(1)+"%"],
+];
+document.getElementById('kpis').innerHTML=kpi.map(([k,v])=>`<div class='card'><h3>${k}</h3><div class='v'>${v}</div></div>`).join('');
+
+const sel=document.getElementById('segment');
+Object.keys(segments).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o);});
+const c=document.getElementById('chart'); const ctx=c.getContext('2d');
+function draw(){
+  const d=segments[sel.value];
+  ctx.clearRect(0,0,c.width,c.height); c.width=c.clientWidth; c.height=320;
+  const pad=40,w=c.width-2*pad,h=c.height-2*pad,max=Math.max(...d.map(x=>x[2]),0.01);
+  ctx.strokeStyle='#cbd5e1'; ctx.beginPath(); ctx.moveTo(pad,pad); ctx.lineTo(pad,pad+h); ctx.lineTo(pad+w,pad+h); ctx.stroke();
+  const bw=w/d.length*0.6;
+  d.forEach((r,i)=>{const x=pad+(i+0.2)*(w/d.length), bh=(r[2]/max)*h, y=pad+h-bh;
+    ctx.fillStyle='#2563eb'; ctx.fillRect(x,y,bw,bh); ctx.fillStyle='#111827'; ctx.fillText(r[0],x,y+h+16); ctx.fillText((r[2]*100).toFixed(1)+'%',x,y-4);
+  });
+}
+sel.onchange=draw; draw();
+</script>
+</body>
+</html>
