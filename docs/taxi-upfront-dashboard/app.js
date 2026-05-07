@@ -1,0 +1,2 @@
+async function load(){return fetch('./data.json').then(r=>r.json())}
+function bar(canvas,labels,vals){const c=document.getElementById(canvas),x=c.getContext('2d');c.width=c.clientWidth;c.height=320;const w=c.width,h=c.height,p=40,m=Math.max(...vals,0.01);x.clearRect(0,0,w,h);x.strokeRect(p,p,w-2*p,h-2*p);vals.forEach((v,i)=>{const bw=(w-2*p)/vals.length*0.6,xx=p+(i+0.2)*(w-2*p)/vals.length,bh=(v/m)*(h-2*p);x.fillStyle='#2563eb';x.fillRect(xx,h-p-bh,bw,bh);x.fillStyle='#111';x.fillText(labels[i],xx,h-p+14);x.fillText((v*100).toFixed(1)+'%',xx,h-p-bh-5);});}

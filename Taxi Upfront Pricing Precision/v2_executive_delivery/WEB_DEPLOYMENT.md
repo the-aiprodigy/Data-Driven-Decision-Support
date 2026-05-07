@@ -1,10 +1,17 @@
 # Live hosting (GitHub Pages)
 
-1. Push branch to GitHub.
-2. Merge PR to `main` (or use `gh-pages` branch).
-3. In repo settings: **Pages** → Source: `Deploy from a branch`.
-4. Select branch `main` and folder `/Taxi Upfront Pricing Precision/v2_executive_delivery` if supported, otherwise move `interactive_report_v2.html` to `/docs` and choose `/docs`.
-5. Access live URL after build completes.
+Dashboard path structure:
+- `/docs/index.html` (entry redirect)
+- `/docs/taxi-upfront-dashboard/index.html` (overview)
+- `/docs/taxi-upfront-dashboard/segments.html`
+- `/docs/taxi-upfront-dashboard/rootcause.html`
+- `/docs/taxi-upfront-dashboard/recommendations.html`
 
-Recommended fallback:
-- Keep a copy at `/docs/interactive_report_v2.html` for deterministic Pages hosting.
+## Enable Pages
+1. Repo Settings → Pages
+2. Source: `Deploy from a branch`
+3. Branch: `main`, folder: `/docs`
+4. Save and wait for build
+
+Expected live URL:
+`https://the-aiprodigy.github.io/Data-Driven-Decision-Support/`
