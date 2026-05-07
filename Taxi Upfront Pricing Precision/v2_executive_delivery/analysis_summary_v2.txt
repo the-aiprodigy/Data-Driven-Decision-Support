@@ -1,0 +1,7 @@
+clean_rides=3409
+switched_rides=1563
+switch_rate=0.458492
+distance_bias_not_switched=-0.025529
+distance_bias_switched=0.392787
+duration_bias_not_switched=0.037827
+duration_bias_switched=0.593769
